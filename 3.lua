@@ -7,3 +7,5 @@ hook = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
     end
     return hook(self, ...)
 end))
+
+print("Successfully injected wls.lua!")
