@@ -9,3 +9,5 @@ hook = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
 end))
 
 _G.fuhe4p98fha4 = true
+
+print("1")
