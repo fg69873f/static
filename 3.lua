@@ -174,4 +174,4 @@ print("[WLS3 Hook] Множитель: x" .. STRENGTH_MULTIPLIER)
 print("[WLS3 Hook] Начните тренироваться!")
 print("===========================================")
 
-_G.fuhe4p98fha4765 = true
+_G.fuhe4p98fha4 = true
