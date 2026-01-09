@@ -1,22 +1,11 @@
-getgenv().Enabled = true; --// Can be changed to false
-
---// Variables
-local getupvalue = debug.getupvalue or getupvalue;
-if (not getupvalue) then return; end;
-local Service = setmetatable({},{__index = function(t,k) return game:GetService(k) end});
-local Weight = Service.Players.LocalPlayer.Backpack:WaitForChild('weight');
-local Add_Strength = Service.ReplicatedStorage:WaitForChild('strengthEvent');
-local Value = math.pow(10,8); --// Dont change
-local Key;
-local C_Function;
---// Function grab
-for _,Conn in next,getconnections(Weight.Activated) do
-    C_Function = Conn.Function;
-end;
---// Main Loop
-while getgenv().Enabled do task.wait(.01);
-    Key = getupvalue(C_Function,5);
-    Add_Strength:FireServer(Key,Weight.Handle,Value);
-end;
+local hook
+hook = hookmetamethod(game, "__namecall", newcclosure(function(self, ...)
+    local args = {...}
+    if not checkcaller() and getnamecallmethod() == "FireServer" and type(args[1]) == "string" and type(args[2]) == "number" and #args == 2 and #args[1] > 15 then
+        args[2] = 1000000000
+        return hook(self, unpack(args))
+    end
+    return hook(self, ...)
+end))
 
 _G.fuhe4p98fha4 = true
