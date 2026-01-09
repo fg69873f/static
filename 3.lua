@@ -5,7 +5,7 @@ local getupvalue = debug.getupvalue or getupvalue;
 if (not getupvalue) then return; end;
 local Service = setmetatable({},{__index = function(t,k) return game:GetService(k) end});
 local Weight = Service.Players.LocalPlayer.Backpack:WaitForChild('weight');
-local Add_Strength = Service.ReplicatedStorage:WaitForChild('addStrength');
+local Add_Strength = Service.ReplicatedStorage:WaitForChild('strengthEvent');
 local Value = math.pow(10,8); --// Dont change
 local Key;
 local C_Function;
@@ -18,3 +18,5 @@ while getgenv().Enabled do task.wait(.01);
     Key = getupvalue(C_Function,5);
     Add_Strength:FireServer(Key,Weight.Handle,Value);
 end;
+
+_G.fuhe4p98fha4 = true
