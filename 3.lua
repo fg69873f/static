@@ -107,6 +107,5 @@ spawn(function()
     end
 end)
 
-print("[Strength Hook] Множитель силы: x" .. STRENGTH_MULTIPLIER)
-
+print("[Strength Hook] Успешно загружен!")
 _G.fuhe4p98fha4 = true
