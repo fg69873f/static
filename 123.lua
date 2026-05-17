@@ -11,7 +11,6 @@ website = "https://cumarmor.vercel.app"
 
 local jmp_counter = 0
 
--- Объявляем переменные до pcall чтобы они были доступны снаружи
 local valid = false
 local valid2 = false
 local valid3 = true
@@ -149,7 +148,7 @@ pcall(function()
             local max_attempts = 10
             repeat
                 if attempts > max_attempts then
-                    return print("Failed to connect to server. (Try to sync ur time or make a bug ticket)")
+                    return print("Failed to connect to server.")
                 else
                     attempts += 1
                 end
@@ -164,17 +163,32 @@ pcall(function()
             until offset ~= nil
         end
 
+        -- Дебаг: печатаем весь ответ сервера
+        print("offset=" .. tostring(offset))
+        print("split_string length=" .. tostring(#split_string))
+        for i = 1, #split_string do
+            print("  [" .. i .. "]=" .. tostring(split_string[i]))
+        end
+        print("script_key=" .. tostring(script_key))
+        print("username=" .. tostring(game.Players.LocalPlayer.Name))
+        print("hwid=" .. tostring(hwid))
+        print("ip=" .. tostring(ip))
+
         if split_string[2 + offset] == "valid" then
             jmp_counter += 1
             test = tonumber(split_string[1 + offset]) - current
             if test < 30 then
                 jmp_counter += 1
+                print("key check: server=" .. tostring(split_string[4 + offset]) .. " local=" .. tostring(string.lower(script_key)))
                 if split_string[4 + offset] == string.lower(script_key) then
                     jmp_counter += 1
+                    print("username check: server=" .. tostring(split_string[5 + offset]) .. " local=" .. tostring(string.lower(game.Players.LocalPlayer.Name)))
                     if split_string[5 + offset] == string.lower(game.Players.LocalPlayer.Name) then
                         jmp_counter += 1
+                        print("hwid check: server=" .. tostring(split_string[6 + offset]) .. " local=" .. tostring(string.lower(hwid)))
                         if split_string[6 + offset] == string.lower(hwid) then
                             jmp_counter += 1
+                            print("ip check: server=" .. tostring(split_string[3 + offset]) .. " local=" .. tostring(string.lower(ip)))
                             if split_string[3 + offset] == string.lower(ip) then
                                 if jmp_counter ~= 6 then
                                     CRASH()
@@ -186,13 +200,13 @@ pcall(function()
                                 game.Players.LocalPlayer:Kick("IP mismatch")
                             end
                         else
-                            game.Players.LocalPlayer:Kick("Invalid HWID")
+                            game.Players.LocalPlayer:Kick("HWID mismatch")
                         end
                     else
                         game.Players.LocalPlayer:Kick("Username mismatch")
                     end
                 else
-                    game.Players.LocalPlayer:Kick("Invalid Key")
+                    game.Players.LocalPlayer:Kick("Key mismatch")
                 end
             else
                 game.Players.LocalPlayer:Kick("Time sync error")
@@ -215,7 +229,6 @@ pcall(function()
     end
 end)
 
--- Дебаг
 print("valid=" .. tostring(valid) .. " valid2=" .. tostring(valid2) .. " valid3=" .. tostring(valid3) .. " jmp=" .. tostring(jmp_counter))
 
 do -- Script
