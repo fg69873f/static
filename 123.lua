@@ -91,7 +91,7 @@ pcall(function()
                 CRASH()
             end
         else
-            print("Connection Failed")
+            game.Players.LocalPlayer:Kick("Connection Failed")
             wait(9e9)
         end
     end
@@ -196,13 +196,13 @@ pcall(function()
                 wait(9e9)
             end
         elseif split_string[2 + offset] == "key" then
-            print("Invalid Key")
+            game.Players.LocalPlayer:Kick("Invalid Key")
         elseif split_string[2 + offset] == "hwid" then
-            print("Invalid Hwid")
+            game.Players.LocalPlayer:Kick("Invalid HWID")
         elseif split_string[2 + offset] == "request" then
-            print("Bad Request")
+            game.Players.LocalPlayer:Kick("Bad Request")
         else
-            print("Error")
+            game.Players.LocalPlayer:Kick("Authorization Error")
             wait(9e9)
         end
     end
