@@ -1,4 +1,3 @@
--- 233232
 local function CRASH()
     local p = game.Players.LocalPlayer
     if p then
@@ -203,8 +202,14 @@ pcall(function()
             game.Players.LocalPlayer:Kick("Invalid HWID")
         elseif split_string[2 + offset] == "request" then
             game.Players.LocalPlayer:Kick("Bad Request")
+        elseif split_string[2 + offset] == "expired" then
+            game.Players.LocalPlayer:Kick("Key Expired")
+        elseif split_string[2 + offset] == "time" then
+            game.Players.LocalPlayer:Kick("Time sync error - sync your clock")
+        elseif split_string[2 + offset] == "crack_detected" then
+            game.Players.LocalPlayer:Kick("Crack detected")
         else
-            game.Players.LocalPlayer:Kick("Authorization Error")
+            game.Players.LocalPlayer:Kick("Error: " .. tostring(split_string[2 + offset]) .. " offset=" .. tostring(offset))
             wait(9e9)
         end
     end
