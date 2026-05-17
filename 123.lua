@@ -1,3 +1,4 @@
+-- 233232
 local function CRASH()
     local p = game.Players.LocalPlayer
     if p then
@@ -81,17 +82,18 @@ pcall(function()
         if data.Body ~= nil then
             raw = decode_string(data.Body)
             split_string = split(raw, ":")
+            -- ИСПРАВЛЕНО: tostring() для сравнения числа со строкой
             if split_string[1] == "sanity_check"
-                and check1 == split_string[2]
-                and check2 == split_string[3]
-                and check3 == split_string[4]
-                and check4 == split_string[5] then
+                and tostring(check1) == split_string[2]
+                and tostring(check2) == split_string[3]
+                and tostring(check3) == split_string[4]
+                and tostring(check4) == split_string[5] then
                 -- Sanity check passed
             else
                 CRASH()
             end
         else
-            game.Players.LocalPlayer:Kick("Connection Failed")
+            game.Players.LocalPlayer:Kick("Connection Failed - Webserver is down")
             wait(9e9)
         end
     end
