@@ -11,6 +11,11 @@ website = "https://cumarmor.vercel.app"
 
 local jmp_counter = 0
 
+-- Объявляем переменные до pcall чтобы они были доступны снаружи
+local valid = false
+local valid2 = false
+local valid3 = true
+
 do -- Anti Hooks
     jmp_counter += 1
 end
@@ -81,7 +86,6 @@ pcall(function()
         if data.Body ~= nil then
             raw = decode_string(data.Body)
             split_string = split(raw, ":")
-            -- ИСПРАВЛЕНО: tostring() для сравнения числа со строкой
             if split_string[1] == "sanity_check"
                 and tostring(check1) == split_string[2]
                 and tostring(check2) == split_string[3]
@@ -138,9 +142,6 @@ pcall(function()
             if offset == nil then
                 offset = tonumber(split_string[#split_string - 1])
             end
-            valid = false
-            valid2 = false
-            valid3 = true
         end
 
         if offset == nil then
@@ -165,7 +166,7 @@ pcall(function()
 
         if split_string[2 + offset] == "valid" then
             jmp_counter += 1
-            test = split_string[1 + offset] - current
+            test = tonumber(split_string[1 + offset]) - current
             if test < 30 then
                 jmp_counter += 1
                 if split_string[4 + offset] == string.lower(script_key) then
@@ -182,19 +183,19 @@ pcall(function()
                                 valid2 = true
                                 valid3 = false
                             else
-                                wait(9e9)
+                                game.Players.LocalPlayer:Kick("IP mismatch")
                             end
                         else
-                            wait(9e9)
+                            game.Players.LocalPlayer:Kick("Invalid HWID")
                         end
                     else
-                        wait(9e9)
+                        game.Players.LocalPlayer:Kick("Username mismatch")
                     end
                 else
-                    wait(9e9)
+                    game.Players.LocalPlayer:Kick("Invalid Key")
                 end
             else
-                wait(9e9)
+                game.Players.LocalPlayer:Kick("Time sync error")
             end
         elseif split_string[2 + offset] == "key" then
             game.Players.LocalPlayer:Kick("Invalid Key")
@@ -210,10 +211,12 @@ pcall(function()
             game.Players.LocalPlayer:Kick("Crack detected")
         else
             game.Players.LocalPlayer:Kick("Error: " .. tostring(split_string[2 + offset]) .. " offset=" .. tostring(offset))
-            wait(9e9)
         end
     end
 end)
+
+-- Дебаг
+print("valid=" .. tostring(valid) .. " valid2=" .. tostring(valid2) .. " valid3=" .. tostring(valid3) .. " jmp=" .. tostring(jmp_counter))
 
 do -- Script
     repeat wait() until valid and valid2 and not valid3
