@@ -6,6 +6,22 @@ local function CRASH()
     while true do wait(9e9) end
 end
 
+-- Executor whitelist
+local _allowedExecutors = {
+    "AWP", "Volt", "ChocoSploit", "Seliware", "Wave", "Volcano",
+    "Potassium", "SirHurt", "Fluxus", "Delta", "Krnl", "Synapse", "Velocity",
+    "Nihon", "Madium", "Cosmic",
+}
+local _executor = identifyexecutor and identifyexecutor() or "Unknown"
+local _allowed = false
+for _, v in ipairs(_allowedExecutors) do
+    if _executor:lower():find(v:lower()) then _allowed = true; break end
+end
+if not _allowed then
+    game:GetService("Players").LocalPlayer:Kick('Your executor ("' .. _executor .. '") cannot run this script.')
+    return
+end
+
 script_key = script_key or _G.script_key or "nil"
 website = "https://cumarmor.vercel.app"
 
@@ -103,7 +119,8 @@ pcall(function()
     do -- Data
         if not trigger and not value then
             current = os.time()
-            raw = generateRandomString(54) .. ":" .. generateRandomString(10) .. ":" .. "key:" .. os.date("%x") .. ":" .. current .. ":" .. script_key .. ":" .. game.Players.LocalPlayer.Name .. ":" .. hwid .. ":" .. ip .. ":" .. "2" .. ":" .. generateRandomString(14)
+            -- Structure: random54 : random10 : "key" : date : current : script_key : username : hwid : ip : executor : "2" : random14
+            raw = generateRandomString(54) .. ":" .. generateRandomString(10) .. ":" .. "key:" .. os.date("%x") .. ":" .. current .. ":" .. script_key .. ":" .. game.Players.LocalPlayer.Name .. ":" .. hwid .. ":" .. ip .. ":" .. _executor .. ":" .. "2" .. ":" .. generateRandomString(14)
             encoded = encode_string(raw)
 
             local query_params = { data = encoded }
@@ -163,32 +180,17 @@ pcall(function()
             until offset ~= nil
         end
 
-        -- Дебаг: печатаем весь ответ сервера
-        print("offset=" .. tostring(offset))
-        print("split_string length=" .. tostring(#split_string))
-        for i = 1, #split_string do
-            print("  [" .. i .. "]=" .. tostring(split_string[i]))
-        end
-        print("script_key=" .. tostring(script_key))
-        print("username=" .. tostring(game.Players.LocalPlayer.Name))
-        print("hwid=" .. tostring(hwid))
-        print("ip=" .. tostring(ip))
-
         if split_string[2 + offset] == "valid" then
             jmp_counter += 1
             test = tonumber(split_string[1 + offset]) - current
             if test < 30 then
                 jmp_counter += 1
-                print("key check: server=" .. tostring(split_string[4 + offset]) .. " local=" .. tostring(string.lower(script_key)))
                 if split_string[4 + offset] == string.lower(script_key) then
                     jmp_counter += 1
-                    print("username check: server=" .. tostring(split_string[5 + offset]) .. " local=" .. tostring(string.lower(game.Players.LocalPlayer.Name)))
                     if split_string[5 + offset] == string.lower(game.Players.LocalPlayer.Name) then
                         jmp_counter += 1
-                        print("hwid check: server=" .. tostring(split_string[6 + offset]) .. " local=" .. tostring(string.lower(hwid)))
                         if split_string[6 + offset] == string.lower(hwid) then
                             jmp_counter += 1
-                            print("ip check: server=" .. tostring(split_string[3 + offset]) .. " local=" .. tostring(string.lower(ip)))
                             if split_string[3 + offset] == string.lower(ip) then
                                 if jmp_counter ~= 6 then
                                     CRASH()
