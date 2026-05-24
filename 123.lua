@@ -215,6 +215,8 @@ pcall(function()
             end
         elseif split_string[2 + offset] == "key" then
             game.Players.LocalPlayer:Kick("Invalid Key")
+        elseif split_string[2 + offset] == "not_activated" then
+            game.Players.LocalPlayer:Kick("Key not activated. Redeem your key in the Discord server first.")
         elseif split_string[2 + offset] == "hwid" then
             game.Players.LocalPlayer:Kick("Invalid HWID")
         elseif split_string[2 + offset] == "request" then
