@@ -283,9 +283,6 @@ do -- Anti Hooks
 end
 
 pcall(function()
-    do -- Functions / Encoding
-        function encode_string(s) return s end
-        function decode_string(s) return s end
 
         function split(str, sep)
             local result = {}
