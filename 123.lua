@@ -283,7 +283,7 @@ do -- Anti Hooks
 end
 
 pcall(function()
-
+    do -- Functions / Encoding
         function split(str, sep)
             local result = {}
             local regex = ("([^%s]+)"):format(sep)
